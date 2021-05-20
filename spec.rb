@@ -21,15 +21,58 @@ class Person
     end
   
     # implement your behavior here
+    def full_name
+      # if @middle_name.nil?
+      #   "#{@first_name} #{@last_name}"
+      # else
+      #   "#{@first_name} #{@middle_name} #{@last_name}"
+      # end  
+      [@first_name, @middle_name, @last_name].compact.join(' ')
+    end
+
+    def full_name_with_middle_initial
+      initial = " #{@middle_name[0]}." if @middle_name
+      "#{@first_name}#{initial} #{@last_name}"
+    end
+
+    def initials
+      middle = " #{@middle_name[0]}." if @middle_name
+      "#{@first_name[0]}.#{middle} #{@last_name[0]}."
+    end
   end
   
   RSpec.describe Person do
     describe "#full_name" do
-      it "concatenates first name, middle name, and last name with spaces"
-      it "does not add extra spaces if middle name is missing"
+      it "concatenates first name, middle name, and last name with spaces" do
+        person = Person.new(first_name: "Alex", middle_name: "Jane", last_name: "Smith")
+        expect(person.full_name).to eq("Alex Jane Smith")
+      end
+      
+      it "does not add extra spaces if middle name is missing" do
+        person = Person.new(first_name: "John", last_name: "Doe")
+        expect(person.full_name).to eq("John Doe")
+      end
+
     end
   
-    describe "#full_name_with_middle_initial"
-  
-    describe "#initials"
+    describe "#full_name_with_middle_initial" do
+      it "returns a full name with middle initial" do 
+        person = Person.new(first_name: "Alex", middle_name: "Jane", last_name: "Smith")
+        expect(person.full_name_with_middle_initial).to eq("Alex J. Smith")
+      end
+      it "does not add extra space if middle name missing" do
+        person = Person.new(first_name: "John", last_name: "Doe")
+        expect(person.full_name_with_middle_initial).to eq("John Doe")
+      end
+    end  
+    describe "#initials" do
+      it "returns all initials" do
+        person = Person.new(first_name: "Alex", middle_name: "Jane", last_name: "Smith")
+        expect(person.initials).to eq("A. J. S.")
+      end
+    end
+      it "returns only 2 initials if middle name missing" do
+        person = Person.new(first_name: "John", last_name: "Doe")
+        expect(person.initials).to eq("J. D.")
+      end
   end
